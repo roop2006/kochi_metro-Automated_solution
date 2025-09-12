@@ -1,0 +1,122 @@
+Build a Simple Web Application with 4 Core Features
+Create a clean, modern web application for Kochi Metro Rail Limited (KMRL) document management with exactly 4 main features. Keep it simple but functional.
+Application Structure
+Main Dashboard
+
+Header: KMRL logo + "Document Management System" title
+4 feature cards in a grid layout with icons and descriptions
+Simple stats bar: Show basic numbers (documents processed, pending approvals, etc.)
+Clean, professional design with blue color scheme
+
+Feature 1: Document Upload 📄
+Simple upload page with:
+
+Large drag-and-drop area with "Drop files here" message
+Support multiple file types (PDF, images, Word docs)
+File selection button as alternative to drag-drop
+Processing simulation: After upload, show:
+
+"Processing..." message with spinner
+Fake AI results: "Document classified as: Maintenance Report"
+"Summary: Weekly brake system inspection completed successfully"
+"Routed to: Maintenance Department"
+
+
+
+Feature 2: Smart Search 🔍
+Basic search interface with:
+
+Search bar with placeholder "Search documents..."
+Search button
+Pre-loaded sample results showing KMRL documents:
+
+"Maintenance Report - Train Car 205"
+"Safety Circular - Platform Guidelines"
+"Vendor Invoice - Track Supplies"
+"Meeting Minutes - Budget Review"
+
+
+Each result shows: Title, Department, Date, Short summary
+Filter buttons: All, Maintenance, Safety, Finance, HR
+
+Feature 3: QR Scanner 📱
+Mobile-friendly QR scanner with:
+
+Large QR code scanner area (can be fake/placeholder)
+"Point camera at QR code" instruction
+Demo button: "Simulate QR Scan"
+When clicked, show sample result:
+
+"Document Found: Maintenance Job Card #MJC-2025-892"
+"Equipment: Train Car 205"
+"Status: In Progress"
+Update Status button
+
+
+Mobile-responsive design
+
+Feature 4: Workflow Management 🔄
+Simple workflow dashboard with:
+
+Pending Approvals section showing:
+
+"Safety Audit Report - Awaiting Review"
+"Vendor Contract - Legal Approval Needed"
+"Maintenance Schedule - Manager Sign-off Required"
+
+
+Each item has: Title, Current stage, Action buttons (Approve/Reject)
+Workflow stages visual: Submitted → Review → Approved → Complete
+Status indicators with colors (yellow=pending, green=approved, red=urgent)
+
+Design Requirements
+Colors
+
+Primary: Blue (#2563eb) - KMRL brand color
+Background: Light gray (#f8fafc)
+Cards: White with subtle shadows
+Success: Green, Warning: Orange, Urgent: Red
+
+Layout
+
+Responsive design that works on mobile and desktop
+Card-based layout for all content
+Large, touch-friendly buttons
+Clean typography - easy to read
+Simple navigation - back buttons to return to dashboard
+
+Sample Data
+Include realistic KMRL content:
+
+Maintenance reports for metro cars
+Safety circulars and guidelines
+Vendor invoices for rail supplies
+Meeting minutes and policy documents
+Equipment inspection logs
+Staff training materials
+
+User Flow
+
+Dashboard → Click feature card
+Feature page → Use the functionality
+Results → Show realistic KMRL data
+Back to dashboard → Continue to other features
+
+Technical Notes
+
+Make it work as a single-page application
+No complex backend needed - simulate all AI processing
+Mobile-first responsive design
+Fast loading with smooth transitions
+Functional buttons and interactions
+
+What NOT to Include
+
+Complex database integration
+Real AI/ML processing
+User authentication
+Advanced analytics
+Multiple user roles
+External API integrations
+
+Keep it simple, clean, and demo-ready for a 10-minute presentation showing KMRL's document management solution.
