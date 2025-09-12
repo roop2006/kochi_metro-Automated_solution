@@ -1,5 +1,8 @@
 import { type Document, type InsertDocument, type WorkflowItem, type InsertWorkflowItem, type QrCode, type InsertQrCode, type Stats, type InsertStats, type SearchResult } from "@shared/schema";
 import { randomUUID } from "crypto";
+import { readFileSync } from "fs";
+import { join, dirname } from "path";
+import { fileURLToPath } from "url";
 
 export interface IStorage {
   // Document operations
@@ -40,183 +43,75 @@ export class MemStorage implements IStorage {
   }
 
   private initializeSyntheticData() {
-    // Initialize with synthetic KMRL documents
-    const syntheticDocs: Document[] = [
-      {
-        id: randomUUID(),
-        title: "Maintenance Report - Train Car 205",
-        department: "Maintenance",
-        type: "maintenance",
-        summary: "Comprehensive brake system inspection and routine maintenance completed. All systems operating within normal parameters.",
-        content: "Weekly maintenance inspection of Train Car 205 brake systems completed successfully. All brake pads, discs, and hydraulic systems checked and found to be in excellent condition.",
-        uploadedAt: new Date("2025-01-10"),
-        status: "active"
-      },
-      {
-        id: randomUUID(),
-        title: "Safety Circular - Platform Guidelines",
-        department: "Safety", 
-        type: "safety",
-        summary: "Updated safety protocols for platform operations during peak hours. Includes emergency evacuation procedures.",
-        content: "New safety guidelines for platform management during peak hours to ensure passenger safety and efficient operations.",
-        uploadedAt: new Date("2025-01-09"),
-        status: "active"
-      },
-      {
-        id: randomUUID(),
-        title: "Vendor Invoice - Track Supplies",
-        department: "Finance",
-        type: "finance", 
-        summary: "Monthly procurement invoice for track maintenance materials and specialized rail components.",
-        content: "Invoice for track maintenance supplies including rails, fasteners, and specialized equipment for Q1 2025.",
-        uploadedAt: new Date("2025-01-08"),
-        status: "active"
-      },
-      {
-        id: randomUUID(),
-        title: "Meeting Minutes - Budget Review",
-        department: "Finance",
-        type: "finance",
-        summary: "Quarterly budget review meeting discussing operational expenses and infrastructure investments.",
-        content: "Detailed minutes from Q4 2024 budget review covering operational costs and planned infrastructure upgrades.",
-        uploadedAt: new Date("2025-01-07"),
-        status: "active"
-      },
-      {
-        id: randomUUID(),
-        title: "Equipment Inspection - Signal Systems",
-        department: "Maintenance",
-        type: "maintenance",
-        summary: "Monthly inspection of automated signaling systems across all metro stations. All equipment functional.",
-        content: "Comprehensive inspection report of all automated signaling systems, control panels, and safety interlocks.",
-        uploadedAt: new Date("2025-01-06"),
-        status: "active"
-      },
-      {
-        id: randomUUID(),
-        title: "Staff Training Manual - Emergency Response",
-        department: "HR",
-        type: "hr",
-        summary: "Comprehensive training manual for emergency response procedures and passenger safety protocols.",
-        content: "Updated emergency response training manual covering fire safety, medical emergencies, and evacuation procedures.",
-        uploadedAt: new Date("2025-01-05"),
-        status: "active"
-      }
-    ];
+    try {
+      // Get current directory for ES modules
+      const __filename = fileURLToPath(import.meta.url);
+      const __dirname = dirname(__filename);
+      
+      // Load documents from data file
+      const documentsData = JSON.parse(
+        readFileSync(join(__dirname, 'data', 'documents.json'), 'utf-8')
+      );
+      
+      documentsData.forEach((docData: any) => {
+        const document: Document = {
+          id: randomUUID(),
+          ...docData,
+          uploadedAt: new Date(docData.uploadedAt),
+          content: docData.content || null
+        };
+        this.documents.set(document.id, document);
+      });
 
-    syntheticDocs.forEach(doc => this.documents.set(doc.id, doc));
+      // Load workflow items from data file
+      const workflowData = JSON.parse(
+        readFileSync(join(__dirname, 'data', 'workflow-items.json'), 'utf-8')
+      );
+      
+      workflowData.forEach((itemData: any) => {
+        const workflowItem: WorkflowItem = {
+          id: randomUUID(),
+          ...itemData,
+          submittedAt: new Date(itemData.submittedAt),
+          updatedAt: new Date(itemData.updatedAt)
+        };
+        this.workflowItems.set(workflowItem.id, workflowItem);
+      });
 
-    // Initialize workflow items
-    const syntheticWorkflow: WorkflowItem[] = [
-      {
-        id: randomUUID(),
-        title: "Safety Audit Report - Q1 2025",
-        description: "Comprehensive safety audit covering all metro stations and rolling stock",
-        currentStage: "review",
-        priority: "urgent",
-        department: "Safety",
-        submittedAt: new Date("2025-01-08"),
-        updatedAt: new Date("2025-01-08")
-      },
-      {
-        id: randomUUID(),
-        title: "Vendor Contract - Track Maintenance Services",
-        description: "Annual contract renewal for specialized track maintenance and inspection services",
-        currentStage: "review",
-        priority: "normal",
-        department: "Legal",
-        submittedAt: new Date("2025-01-07"),
-        updatedAt: new Date("2025-01-07")
-      },
-      {
-        id: randomUUID(),
-        title: "Maintenance Schedule - Rolling Stock Q2",
-        description: "Quarterly maintenance schedule for all metro cars and locomotives",
-        currentStage: "submitted",
-        priority: "normal",
-        department: "Maintenance",
-        submittedAt: new Date("2025-01-06"),
-        updatedAt: new Date("2025-01-06")
-      },
-      {
-        id: randomUUID(),
-        title: "Budget Revision - Infrastructure Upgrades",
-        description: "Budget allocation for signal system modernization and platform improvements",
-        currentStage: "review",
-        priority: "urgent",
-        department: "Finance",
-        submittedAt: new Date("2025-01-05"),
-        updatedAt: new Date("2025-01-05")
-      }
-    ];
+      // Load QR codes from data file
+      const qrCodeData = JSON.parse(
+        readFileSync(join(__dirname, 'data', 'qr-codes.json'), 'utf-8')
+      );
+      
+      qrCodeData.forEach((qrData: any) => {
+        const qrCode: QrCode = {
+          id: randomUUID(),
+          ...qrData,
+          createdAt: new Date(qrData.createdAt),
+          updatedAt: new Date(qrData.updatedAt)
+        };
+        this.qrCodes.set(qrCode.id, qrCode);
+      });
 
-    syntheticWorkflow.forEach(item => this.workflowItems.set(item.id, item));
-
-    // Initialize QR codes
-    const syntheticQR: QrCode[] = [
-      {
-        id: randomUUID(),
-        code: "MJC-2025-892",
-        title: "Maintenance Job Card #MJC-2025-892",
-        equipment: "Train Car 205",
-        status: "in_progress",
-        description: "Brake system inspection and routine maintenance work in progress",
-        createdAt: new Date("2025-01-10"),
-        updatedAt: new Date("2025-01-10")
-      },
-      {
-        id: randomUUID(),
-        code: "MJC-2025-893",
-        title: "Maintenance Job Card #MJC-2025-893",
-        equipment: "Signal System Block A3",
-        status: "pending",
-        description: "Scheduled signal maintenance pending approval and resource allocation",
-        createdAt: new Date("2025-01-09"),
-        updatedAt: new Date("2025-01-09")
-      },
-      {
-        id: randomUUID(),
-        code: "MJC-2025-891",
-        title: "Maintenance Job Card #MJC-2025-891",
-        equipment: "Platform Safety Barriers",
-        status: "completed",
-        description: "Safety barrier inspection and testing completed successfully",
-        createdAt: new Date("2025-01-08"),
-        updatedAt: new Date("2025-01-10")
-      }
-    ];
-
-    syntheticQR.forEach(qr => this.qrCodes.set(qr.id, qr));
-
-    // Initialize stats
-    const syntheticStats: Stats[] = [
-      {
-        id: randomUUID(),
-        metric: "documents_processed",
-        value: "2847",
-        updatedAt: new Date()
-      },
-      {
-        id: randomUUID(),
-        metric: "pending_approvals",
-        value: "23",
-        updatedAt: new Date()
-      },
-      {
-        id: randomUUID(),
-        metric: "completed_today",
-        value: "156",
-        updatedAt: new Date()
-      },
-      {
-        id: randomUUID(),
-        metric: "urgent_items",
-        value: "7",
-        updatedAt: new Date()
-      }
-    ];
-
-    syntheticStats.forEach(stat => this.stats.set(stat.metric, stat));
+      // Load stats from data file
+      const statsData = JSON.parse(
+        readFileSync(join(__dirname, 'data', 'stats.json'), 'utf-8')
+      );
+      
+      statsData.forEach((statData: any) => {
+        const stat: Stats = {
+          id: randomUUID(),
+          metric: statData.metric,
+          value: statData.value,
+          updatedAt: new Date()
+        };
+        this.stats.set(stat.metric, stat);
+      });
+      
+    } catch (error) {
+      console.error('Error loading synthetic data:', error);
+      throw new Error('Failed to initialize synthetic data from files');
+    }
   }
 
   // Document operations

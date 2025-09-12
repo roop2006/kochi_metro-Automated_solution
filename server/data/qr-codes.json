@@ -1,0 +1,92 @@
+[
+  {
+    "code": "MJC-2025-892",
+    "title": "Maintenance Job Card #MJC-2025-892",
+    "equipment": "Train Car 205",
+    "status": "in_progress",
+    "description": "Brake system inspection and routine maintenance work in progress. Includes brake pad inspection, hydraulic system check, and safety system verification.",
+    "createdAt": "2025-01-10T00:00:00.000Z",
+    "updatedAt": "2025-01-10T00:00:00.000Z"
+  },
+  {
+    "code": "MJC-2025-893", 
+    "title": "Maintenance Job Card #MJC-2025-893",
+    "equipment": "Signal System Block A3",
+    "status": "pending",
+    "description": "Scheduled signal maintenance pending approval and resource allocation. Includes signal calibration, communication system check, and safety interlock verification.",
+    "createdAt": "2025-01-09T00:00:00.000Z",
+    "updatedAt": "2025-01-09T00:00:00.000Z"
+  },
+  {
+    "code": "MJC-2025-891",
+    "title": "Maintenance Job Card #MJC-2025-891", 
+    "equipment": "Platform Safety Barriers",
+    "status": "completed",
+    "description": "Safety barrier inspection and testing completed successfully. All platform screen doors and safety barriers functioning properly.",
+    "createdAt": "2025-01-08T00:00:00.000Z",
+    "updatedAt": "2025-01-10T00:00:00.000Z"
+  },
+  {
+    "code": "MJC-2025-894",
+    "title": "Maintenance Job Card #MJC-2025-894",
+    "equipment": "Escalator - Aluva Station",
+    "status": "pending", 
+    "description": "Quarterly maintenance of escalator systems at Aluva Station. Includes lubrication, safety system check, and emergency stop testing.",
+    "createdAt": "2025-01-07T00:00:00.000Z",
+    "updatedAt": "2025-01-07T00:00:00.000Z"
+  },
+  {
+    "code": "MJC-2025-895",
+    "title": "Maintenance Job Card #MJC-2025-895",
+    "equipment": "HVAC System - Train Car 301",
+    "status": "in_progress",
+    "description": "Air conditioning system maintenance for Train Car 301. Includes filter replacement, refrigerant level check, and temperature control calibration.",
+    "createdAt": "2025-01-06T00:00:00.000Z",
+    "updatedAt": "2025-01-08T00:00:00.000Z"
+  },
+  {
+    "code": "MJC-2025-896",
+    "title": "Maintenance Job Card #MJC-2025-896",
+    "equipment": "Power Supply - Edapally Substation",
+    "status": "completed",
+    "description": "Preventive maintenance of electrical power supply systems at Edapally Substation. All power distribution and backup systems tested and verified.",
+    "createdAt": "2025-01-05T00:00:00.000Z",
+    "updatedAt": "2025-01-06T00:00:00.000Z"
+  },
+  {
+    "code": "MJC-2025-897",
+    "title": "Maintenance Job Card #MJC-2025-897", 
+    "equipment": "Fire Safety System - MG Road Station",
+    "status": "pending",
+    "description": "Annual inspection and testing of fire safety systems including smoke detectors, fire suppression system, and emergency lighting at MG Road Station.",
+    "createdAt": "2025-01-04T00:00:00.000Z",
+    "updatedAt": "2025-01-04T00:00:00.000Z"
+  },
+  {
+    "code": "MJC-2025-898",
+    "title": "Maintenance Job Card #MJC-2025-898",
+    "equipment": "Track Infrastructure - Segment 12",
+    "status": "completed",
+    "description": "Track inspection and maintenance for Segment 12 (Palarivattom to JLN Stadium). Rail alignment, fastener tightness, and track geometry verified within specifications.",
+    "createdAt": "2025-01-03T00:00:00.000Z",
+    "updatedAt": "2025-01-05T00:00:00.000Z"
+  },
+  {
+    "code": "MJC-2025-899",
+    "title": "Maintenance Job Card #MJC-2025-899",
+    "equipment": "Communication System - Control Room",
+    "status": "in_progress",
+    "description": "Monthly maintenance of communication systems in main control room. Includes radio system check, CCTV system maintenance, and backup communication testing.",
+    "createdAt": "2025-01-02T00:00:00.000Z",
+    "updatedAt": "2025-01-07T00:00:00.000Z"
+  },
+  {
+    "code": "MJC-2025-900",
+    "title": "Maintenance Job Card #MJC-2025-900",
+    "equipment": "Ticketing Machines - Kaloor Station", 
+    "status": "pending",
+    "description": "Routine maintenance of automated ticketing machines at Kaloor Station. Includes cash handling system service, printer maintenance, and software updates.",
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  }
+]

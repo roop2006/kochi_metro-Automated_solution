@@ -1,0 +1,58 @@
+[
+  {
+    "classification": "Maintenance Report",
+    "department": "Maintenance Department",
+    "type": "maintenance",
+    "summaryTemplate": "Weekly maintenance inspection and safety verification completed for {equipment}. All systems checked and found to be operating within normal parameters.",
+    "keywords": ["maintenance", "inspection", "repair", "service", "equipment", "mechanical", "electrical"]
+  },
+  {
+    "classification": "Safety Circular", 
+    "department": "Safety Department",
+    "type": "safety",
+    "summaryTemplate": "Updated safety protocols and emergency procedures for {area}. Includes revised guidelines for staff and passenger safety compliance.",
+    "keywords": ["safety", "emergency", "procedure", "protocol", "guidelines", "compliance", "hazard"]
+  },
+  {
+    "classification": "Vendor Invoice",
+    "department": "Finance Department", 
+    "type": "finance",
+    "summaryTemplate": "Procurement invoice for {items} and related services. Payment processing as per vendor agreement terms and conditions.",
+    "keywords": ["invoice", "payment", "vendor", "procurement", "purchase", "billing", "financial"]
+  },
+  {
+    "classification": "Training Manual",
+    "department": "HR Department",
+    "type": "hr", 
+    "summaryTemplate": "Staff training documentation for {subject} covering operational procedures and safety protocols for KMRL personnel.",
+    "keywords": ["training", "manual", "staff", "personnel", "education", "procedures", "guidelines"]
+  },
+  {
+    "classification": "Policy Document",
+    "department": "Administration Department",
+    "type": "hr",
+    "summaryTemplate": "Updated policy document regarding {subject}. Effective immediately for all KMRL operations and personnel.",
+    "keywords": ["policy", "regulation", "rule", "guideline", "standard", "procedure", "directive"]
+  },
+  {
+    "classification": "Technical Specification",
+    "department": "Engineering Department", 
+    "type": "maintenance",
+    "summaryTemplate": "Technical specifications and requirements for {equipment}. Includes installation, operation, and maintenance guidelines.",
+    "keywords": ["specification", "technical", "engineering", "requirements", "standards", "design", "architecture"]
+  },
+  {
+    "classification": "Budget Report",
+    "department": "Finance Department",
+    "type": "finance",
+    "summaryTemplate": "Financial analysis and budget allocation report for {period}. Includes expenditure breakdown and resource planning.",
+    "keywords": ["budget", "financial", "expenditure", "cost", "allocation", "planning", "analysis"]
+  },
+  {
+    "classification": "Audit Report",
+    "department": "Quality Assurance Department",
+    "type": "safety",
+    "summaryTemplate": "Comprehensive audit report covering {scope}. Findings, recommendations, and compliance status documented.",
+    "keywords": ["audit", "compliance", "quality", "assessment", "evaluation", "review", "inspection"]
+  }
+]

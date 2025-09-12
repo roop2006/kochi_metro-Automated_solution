@@ -3,12 +3,117 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertDocumentSchema, insertWorkflowItemSchema, insertQrCodeSchema } from "@shared/schema";
 import multer from "multer";
+import { readFileSync } from "fs";
+import { join, dirname } from "path";
+import { fileURLToPath } from "url";
 
 // Configure multer for file uploads
 const upload = multer({ 
   storage: multer.memoryStorage(),
   limits: { fileSize: 10 * 1024 * 1024 } // 10MB limit
 });
+
+// Helper functions for AI classification
+function extractEquipmentFromFilename(filename: string): string {
+  const equipmentPatterns = [
+    /train\s*car\s*(\d+)/i,
+    /signal\s*system/i,
+    /platform\s*safety/i,
+    /escalator/i,
+    /hvac/i,
+    /power\s*supply/i,
+    /fire\s*safety/i,
+    /track/i,
+    /communication/i,
+    /ticketing/i
+  ];
+  
+  for (const pattern of equipmentPatterns) {
+    const match = filename.match(pattern);
+    if (match) return match[0];
+  }
+  return 'metro equipment';
+}
+
+function extractAreaFromFilename(filename: string): string {
+  const areaPatterns = [
+    /platform/i,
+    /station/i,
+    /control\s*room/i,
+    /depot/i,
+    /workshop/i,
+    /office/i
+  ];
+  
+  for (const pattern of areaPatterns) {
+    if (pattern.test(filename)) return filename.match(pattern)![0];
+  }
+  return 'operational areas';
+}
+
+function extractItemsFromFilename(filename: string): string {
+  const itemPatterns = [
+    /supplies/i,
+    /materials/i,
+    /components/i,
+    /equipment/i,
+    /parts/i,
+    /tools/i
+  ];
+  
+  for (const pattern of itemPatterns) {
+    if (pattern.test(filename)) return filename.match(pattern)![0];
+  }
+  return 'operational supplies';
+}
+
+function extractSubjectFromFilename(filename: string): string {
+  const subjectPatterns = [
+    /emergency\s*response/i,
+    /safety\s*protocols/i,
+    /maintenance\s*procedures/i,
+    /operational\s*guidelines/i,
+    /training/i
+  ];
+  
+  for (const pattern of subjectPatterns) {
+    if (pattern.test(filename)) return filename.match(pattern)![0];
+  }
+  return 'operational procedures';
+}
+
+function extractPeriodFromFilename(filename: string): string {
+  const periodPatterns = [
+    /q[1-4]\s*202[0-9]/i,
+    /january|february|march|april|may|june|july|august|september|october|november|december/i,
+    /202[0-9]/i,
+    /monthly/i,
+    /quarterly/i,
+    /annual/i
+  ];
+  
+  for (const pattern of periodPatterns) {
+    const match = filename.match(pattern);
+    if (match) return match[0];
+  }
+  return 'current period';
+}
+
+function extractScopeFromFilename(filename: string): string {
+  const scopePatterns = [
+    /safety\s*systems/i,
+    /operational\s*procedures/i,
+    /infrastructure/i,
+    /rolling\s*stock/i,
+    /stations/i,
+    /maintenance/i
+  ];
+  
+  for (const pattern of scopePatterns) {
+    if (pattern.test(filename)) return filename.match(pattern)![0];
+  }
+  return 'KMRL operations';
+}
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Stats endpoint
@@ -72,41 +177,51 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ error: "No file uploaded" });
       }
 
-      // Simulate AI processing with realistic classifications
-      const classifications = [
-        {
-          classification: 'Maintenance Report',
-          summary: `${file.originalname} - Weekly brake system inspection completed successfully for Train Car 205`,
-          department: 'Maintenance Department',
-          type: 'maintenance'
-        },
-        {
-          classification: 'Safety Circular',
-          summary: `${file.originalname} - Updated platform safety guidelines and emergency procedures`,
-          department: 'Safety Department',
-          type: 'safety'
-        },
-        {
-          classification: 'Vendor Invoice',
-          summary: `${file.originalname} - Track supplies and materials procurement invoice for Q1 2025`,
-          department: 'Finance Department',
-          type: 'finance'
-        },
-        {
-          classification: 'Training Manual',
-          summary: `${file.originalname} - Staff training documentation for operational procedures`,
-          department: 'HR Department',
-          type: 'hr'
-        }
-      ];
+      // Get current directory for ES modules
+      const __filename = fileURLToPath(import.meta.url);
+      const __dirname = dirname(__filename);
+      
+      // Load AI classifications from data file
+      const classificationsData = JSON.parse(
+        readFileSync(join(__dirname, 'data', 'ai-classifications.json'), 'utf-8')
+      );
 
-      const randomClassification = classifications[Math.floor(Math.random() * classifications.length)];
+      // Simple AI simulation based on filename and content patterns
+      const filename = file.originalname.toLowerCase();
+      let selectedClassification = classificationsData[Math.floor(Math.random() * classificationsData.length)];
+      
+      // Basic keyword matching for more realistic AI behavior
+      for (const classification of classificationsData) {
+        const matchingKeywords = classification.keywords.filter((keyword: string) => 
+          filename.includes(keyword.toLowerCase())
+        );
+        if (matchingKeywords.length > 0) {
+          selectedClassification = classification;
+          break;
+        }
+      }
+      
+      // Generate summary from template
+      const equipment = extractEquipmentFromFilename(filename);
+      const area = extractAreaFromFilename(filename);
+      const items = extractItemsFromFilename(filename);
+      const subject = extractSubjectFromFilename(filename);
+      const period = extractPeriodFromFilename(filename);
+      const scope = extractScopeFromFilename(filename);
+      
+      let summary = selectedClassification.summaryTemplate
+        .replace('{equipment}', equipment)
+        .replace('{area}', area)
+        .replace('{items}', items)
+        .replace('{subject}', subject)
+        .replace('{period}', period)
+        .replace('{scope}', scope);
       
       const documentData = {
-        title: randomClassification.classification + ' - ' + file.originalname,
-        department: randomClassification.department,
-        type: randomClassification.type,
-        summary: randomClassification.summary,
+        title: selectedClassification.classification + ' - ' + file.originalname,
+        department: selectedClassification.department,
+        type: selectedClassification.type,
+        summary: summary,
         content: `Uploaded file: ${file.originalname} (${file.size} bytes)`,
         status: 'active'
       };
@@ -117,9 +232,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json({
         document,
         processing: {
-          classification: randomClassification.classification,
-          summary: randomClassification.summary,
-          department: randomClassification.department
+          classification: selectedClassification.classification,
+          summary: summary,
+          department: selectedClassification.department
         }
       });
     } catch (error) {

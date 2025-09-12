@@ -1,0 +1,74 @@
+[
+  {
+    "title": "Safety Audit Report - Q1 2025",
+    "description": "Comprehensive safety audit covering all metro stations and rolling stock. Includes inspection of safety systems, emergency procedures, and compliance with railway safety standards.",
+    "currentStage": "review",
+    "priority": "urgent",
+    "department": "Safety",
+    "submittedAt": "2025-01-08T00:00:00.000Z",
+    "updatedAt": "2025-01-08T00:00:00.000Z"
+  },
+  {
+    "title": "Vendor Contract - Track Maintenance Services",
+    "description": "Annual contract renewal for specialized track maintenance and inspection services. Includes preventive maintenance, emergency repairs, and periodic safety inspections of all track infrastructure.",
+    "currentStage": "review", 
+    "priority": "normal",
+    "department": "Legal",
+    "submittedAt": "2025-01-07T00:00:00.000Z",
+    "updatedAt": "2025-01-07T00:00:00.000Z"
+  },
+  {
+    "title": "Maintenance Schedule - Rolling Stock Q2",
+    "description": "Quarterly maintenance schedule for all metro cars and locomotives. Covers routine inspections, component replacements, and major overhauls as per manufacturer guidelines.",
+    "currentStage": "submitted",
+    "priority": "normal",
+    "department": "Maintenance", 
+    "submittedAt": "2025-01-06T00:00:00.000Z",
+    "updatedAt": "2025-01-06T00:00:00.000Z"
+  },
+  {
+    "title": "Budget Revision - Infrastructure Upgrades",
+    "description": "Budget allocation for signal system modernization and platform improvements. Includes funding for new CBTC systems, platform screen doors, and accessibility enhancements.",
+    "currentStage": "review",
+    "priority": "urgent", 
+    "department": "Finance",
+    "submittedAt": "2025-01-05T00:00:00.000Z",
+    "updatedAt": "2025-01-05T00:00:00.000Z"
+  },
+  {
+    "title": "Staff Training Program - Emergency Response",
+    "description": "Comprehensive emergency response training program for all operational staff. Covers fire safety, medical emergencies, evacuation procedures, and coordination with external agencies.",
+    "currentStage": "submitted",
+    "priority": "normal",
+    "department": "HR",
+    "submittedAt": "2025-01-04T00:00:00.000Z", 
+    "updatedAt": "2025-01-04T00:00:00.000Z"
+  },
+  {
+    "title": "Digital Ticketing System Upgrade",
+    "description": "Proposal for upgrading the current ticketing system to support mobile payments, contactless cards, and integration with other transport modes in Kerala.",
+    "currentStage": "submitted",
+    "priority": "normal",
+    "department": "IT",
+    "submittedAt": "2025-01-03T00:00:00.000Z",
+    "updatedAt": "2025-01-03T00:00:00.000Z"
+  },
+  {
+    "title": "Environmental Impact Assessment",
+    "description": "Annual environmental impact assessment for KMRL operations. Covers noise levels, air quality impact, waste management, and sustainability initiatives.",
+    "currentStage": "review",
+    "priority": "normal",
+    "department": "Environmental",
+    "submittedAt": "2025-01-02T00:00:00.000Z",
+    "updatedAt": "2025-01-02T00:00:00.000Z"
+  },
+  {
+    "title": "Customer Feedback Analysis",
+    "description": "Quarterly analysis of customer feedback and service quality metrics. Includes passenger satisfaction surveys, complaint resolution statistics, and service improvement recommendations.",
+    "currentStage": "submitted", 
+    "priority": "normal",
+    "department": "Customer Service",
+    "submittedAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  }
+]

@@ -1,0 +1,92 @@
+[
+  {
+    "title": "Maintenance Report - Train Car 205",
+    "department": "Maintenance",
+    "type": "maintenance",
+    "summary": "Comprehensive brake system inspection and routine maintenance completed. All systems operating within normal parameters.",
+    "content": "Weekly maintenance inspection of Train Car 205 brake systems completed successfully. All brake pads, discs, and hydraulic systems checked and found to be in excellent condition. Recommended maintenance schedule: Next inspection due in 7 days. All safety protocols followed during inspection process.",
+    "uploadedAt": "2025-01-10T00:00:00.000Z",
+    "status": "active"
+  },
+  {
+    "title": "Safety Circular - Platform Guidelines",
+    "department": "Safety",
+    "type": "safety", 
+    "summary": "Updated safety protocols for platform operations during peak hours. Includes emergency evacuation procedures.",
+    "content": "New safety guidelines for platform management during peak hours to ensure passenger safety and efficient operations. Updated procedures for crowd control, emergency response, and staff coordination during high-traffic periods.",
+    "uploadedAt": "2025-01-09T00:00:00.000Z",
+    "status": "active"
+  },
+  {
+    "title": "Vendor Invoice - Track Supplies",
+    "department": "Finance",
+    "type": "finance",
+    "summary": "Monthly procurement invoice for track maintenance materials and specialized rail components.",
+    "content": "Invoice for track maintenance supplies including rails, fasteners, and specialized equipment for Q1 2025. Total amount: ₹2,45,000. Vendor: Kerala Rail Components Ltd. Payment due: 30 days from invoice date.",
+    "uploadedAt": "2025-01-08T00:00:00.000Z",
+    "status": "active"
+  },
+  {
+    "title": "Meeting Minutes - Budget Review",
+    "department": "Finance", 
+    "type": "finance",
+    "summary": "Quarterly budget review meeting discussing operational expenses and infrastructure investments.",
+    "content": "Detailed minutes from Q4 2024 budget review covering operational costs and planned infrastructure upgrades. Key decisions: Approved budget increase for signal modernization project, allocated funds for additional train cars, reviewed maintenance cost optimization.",
+    "uploadedAt": "2025-01-07T00:00:00.000Z",
+    "status": "active"
+  },
+  {
+    "title": "Equipment Inspection - Signal Systems",
+    "department": "Maintenance",
+    "type": "maintenance",
+    "summary": "Monthly inspection of automated signaling systems across all metro stations. All equipment functional.",
+    "content": "Comprehensive inspection report of all automated signaling systems, control panels, and safety interlocks. Stations covered: Aluva, Kalamassery, Edapally, Changampuzha Park, Palarivattom, JLN Stadium, Kaloor, Town Hall, MG Road, Maharajas, Ernakulam South. All systems operational.",
+    "uploadedAt": "2025-01-06T00:00:00.000Z",
+    "status": "active"
+  },
+  {
+    "title": "Staff Training Manual - Emergency Response", 
+    "department": "HR",
+    "type": "hr",
+    "summary": "Comprehensive training manual for emergency response procedures and passenger safety protocols.",
+    "content": "Updated emergency response training manual covering fire safety, medical emergencies, and evacuation procedures. Includes contact protocols, communication procedures, and coordination with Kerala State Emergency Services. Training completion mandatory for all operational staff.",
+    "uploadedAt": "2025-01-05T00:00:00.000Z",
+    "status": "active"
+  },
+  {
+    "title": "Annual Safety Audit Report",
+    "department": "Safety",
+    "type": "safety",
+    "summary": "Comprehensive annual safety audit covering all KMRL operations and infrastructure.",
+    "content": "Annual safety audit conducted by certified railway safety inspectors. Covers rolling stock safety, infrastructure integrity, operational procedures, and emergency preparedness. Overall rating: Excellent. Minor recommendations for platform lighting improvements at select stations.",
+    "uploadedAt": "2025-01-04T00:00:00.000Z", 
+    "status": "active"
+  },
+  {
+    "title": "New Recruitment Policy",
+    "department": "HR",
+    "type": "hr",
+    "summary": "Updated recruitment and selection policy for operational and technical positions.",
+    "content": "Revised recruitment policy incorporating updated skill requirements for metro operations. New emphasis on digital literacy, safety certification requirements, and diversity hiring goals. Effective immediately for all new positions posted after January 2025.",
+    "uploadedAt": "2025-01-03T00:00:00.000Z",
+    "status": "active"
+  },
+  {
+    "title": "Energy Efficiency Report",
+    "department": "Maintenance",
+    "type": "maintenance", 
+    "summary": "Quarterly report on energy consumption and efficiency measures across KMRL network.",
+    "content": "Q4 2024 energy efficiency analysis showing 12% reduction in power consumption through LED lighting upgrades and regenerative braking optimization. Recommendations for further improvements include solar panel installations at major stations and enhanced power management systems.",
+    "uploadedAt": "2025-01-02T00:00:00.000Z",
+    "status": "active"
+  },
+  {
+    "title": "Revenue Collection Analysis",
+    "department": "Finance",
+    "type": "finance",
+    "summary": "Monthly analysis of ticket revenue and passenger traffic patterns.",
+    "content": "December 2024 revenue collection report showing increased ridership during festive season. Total revenue: ₹1.2 crores. Peak hours: 8-10 AM and 6-8 PM. Recommendations for dynamic pricing during peak hours and promotional offers during off-peak periods.",
+    "uploadedAt": "2025-01-01T00:00:00.000Z",
+    "status": "active"
+  }
+]

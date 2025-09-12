@@ -1,0 +1,42 @@
+[
+  {
+    "metric": "documents_processed",
+    "value": "2847",
+    "description": "Total number of documents processed through the KMRL document management system"
+  },
+  {
+    "metric": "pending_approvals", 
+    "value": "23",
+    "description": "Number of documents and workflow items currently pending approval"
+  },
+  {
+    "metric": "completed_today",
+    "value": "156",
+    "description": "Number of tasks and approvals completed today"
+  },
+  {
+    "metric": "urgent_items",
+    "value": "7", 
+    "description": "Number of high-priority items requiring immediate attention"
+  },
+  {
+    "metric": "active_maintenance_jobs",
+    "value": "12",
+    "description": "Number of maintenance jobs currently in progress"
+  },
+  {
+    "metric": "stations_operational",
+    "value": "11", 
+    "description": "Number of metro stations currently operational"
+  },
+  {
+    "metric": "train_cars_active",
+    "value": "18",
+    "description": "Number of train cars currently in active service"
+  },
+  {
+    "metric": "monthly_ridership",
+    "value": "145000",
+    "description": "Total passenger ridership for the current month"
+  }
+]
