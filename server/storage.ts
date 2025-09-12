@@ -235,6 +235,7 @@ export class MemStorage implements IStorage {
     const document: Document = {
       ...doc,
       id,
+      content: doc.content || null,
       uploadedAt: new Date(),
       status: doc.status || 'active'
     };
@@ -288,6 +289,8 @@ export class MemStorage implements IStorage {
     const workflowItem: WorkflowItem = {
       ...item,
       id,
+      currentStage: item.currentStage || 'submitted',
+      priority: item.priority || 'normal',
       submittedAt: new Date(),
       updatedAt: new Date()
     };
@@ -322,6 +325,7 @@ export class MemStorage implements IStorage {
     const qrCode: QrCode = {
       ...qr,
       id,
+      status: qr.status || 'pending',
       createdAt: new Date(),
       updatedAt: new Date()
     };
