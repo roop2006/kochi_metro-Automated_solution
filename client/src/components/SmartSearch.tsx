@@ -25,15 +25,23 @@ export default function SmartSearch({ onBack }: SmartSearchProps) {
   
   const { data: searchResultsData, isLoading, error } = useQuery<SearchResult[]>({
     queryKey: ['/api/documents/search', searchQuery, activeFilter],
-    queryFn: () => {
+    queryFn: async () => {
       const params = new URLSearchParams()
       if (searchQuery) params.append('q', searchQuery)
       if (activeFilter !== 'all') params.append('type', activeFilter)
-      return fetch(`/api/documents/search?${params}`).then(res => res.json())
+      
+      const response = await fetch(`/api/documents/search?${params}`)
+      if (!response.ok) {
+        throw new Error(`Search failed: ${response.status}`)
+      }
+      
+      const data = await response.json()
+      // Ensure we always return an array
+      return Array.isArray(data) ? data : []
     }
   })
   
-  // Ensure searchResults is always an array
+  // Double-check to ensure searchResults is always an array
   const searchResults = Array.isArray(searchResultsData) ? searchResultsData : []
 
   const filters = [
