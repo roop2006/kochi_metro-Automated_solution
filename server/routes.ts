@@ -26,7 +26,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Document routes
+  // Document routes - Note: specific routes must come before parametric routes
   app.get("/api/documents", async (req, res) => {
     try {
       const documents = await storage.getDocuments();
@@ -34,6 +34,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error('Error fetching documents:', error);
       res.status(500).json({ error: "Failed to fetch documents" });
+    }
+  });
+
+  // Search documents - MUST come before /:id route
+  app.get("/api/documents/search", async (req, res) => {
+    try {
+      const { q, type } = req.query;
+      const results = await storage.searchDocuments(
+        q as string || '', 
+        type as string
+      );
+      res.json(results);
+    } catch (error) {
+      console.error('Error searching documents:', error);
+      res.status(500).json({ error: "Failed to search documents" });
     }
   });
 
@@ -113,20 +128,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Search documents
-  app.get("/api/documents/search", async (req, res) => {
-    try {
-      const { q, type } = req.query;
-      const results = await storage.searchDocuments(
-        q as string || '', 
-        type as string
-      );
-      res.json(results);
-    } catch (error) {
-      console.error('Error searching documents:', error);
-      res.status(500).json({ error: "Failed to search documents" });
-    }
-  });
+  // Search route moved above to prevent conflict with /:id route
 
   // Workflow routes
   app.get("/api/workflow", async (req, res) => {
