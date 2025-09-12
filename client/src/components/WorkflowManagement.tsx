@@ -2,84 +2,46 @@ import { useState } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { GitBranch, ArrowLeft, Clock, CheckCircle, XCircle, AlertTriangle } from 'lucide-react'
-
-interface WorkflowItem {
-  id: string
-  title: string
-  currentStage: 'submitted' | 'review' | 'approved' | 'complete'
-  priority: 'normal' | 'urgent'
-  department: string
-  submittedDate: string
-  description: string
-}
+import { GitBranch, ArrowLeft, Clock, CheckCircle, XCircle, AlertTriangle, Loader2 } from 'lucide-react'
+import { useQuery, useMutation } from '@tanstack/react-query'
+import { apiRequest, queryClient } from '@/lib/queryClient'
+import { type WorkflowItem } from '@shared/schema'
 
 interface WorkflowManagementProps {
   onBack: () => void
 }
 
 export default function WorkflowManagement({ onBack }: WorkflowManagementProps) {
-  //todo: remove mock functionality - replace with real workflow API
-  const [workflowItems, setWorkflowItems] = useState<WorkflowItem[]>([
-    {
-      id: '1',
-      title: 'Safety Audit Report - Q1 2025',
-      currentStage: 'review',
-      priority: 'urgent',
-      department: 'Safety',
-      submittedDate: '2025-01-08',
-      description: 'Comprehensive safety audit covering all metro stations and rolling stock'
-    },
-    {
-      id: '2', 
-      title: 'Vendor Contract - Track Maintenance Services',
-      currentStage: 'review',
-      priority: 'normal',
-      department: 'Legal',
-      submittedDate: '2025-01-07',
-      description: 'Annual contract renewal for specialized track maintenance and inspection services'
-    },
-    {
-      id: '3',
-      title: 'Maintenance Schedule - Rolling Stock Q2',
-      currentStage: 'submitted',
-      priority: 'normal', 
-      department: 'Maintenance',
-      submittedDate: '2025-01-06',
-      description: 'Quarterly maintenance schedule for all metro cars and locomotives'
-    },
-    {
-      id: '4',
-      title: 'Budget Revision - Infrastructure Upgrades',
-      currentStage: 'review',
-      priority: 'urgent',
-      department: 'Finance',
-      submittedDate: '2025-01-05',
-      description: 'Budget allocation for signal system modernization and platform improvements'
+  const { data: workflowItems = [], isLoading, error } = useQuery<WorkflowItem[]>({
+    queryKey: ['/api/workflow'],
+  })
+  
+  const updateWorkflowMutation = useMutation({
+    mutationFn: ({ id, updates }: { id: string, updates: Partial<WorkflowItem> }) => 
+      fetch(`/api/workflow/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updates)
+      }).then(res => res.json()),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/workflow'] })
     }
-  ])
+  })
 
   const handleApprove = (itemId: string) => {
+    const item = workflowItems.find((item: WorkflowItem) => item.id === itemId)
+    if (!item) return
+    
+    const nextStage = item.currentStage === 'submitted' ? 'review' : 
+                      item.currentStage === 'review' ? 'approved' : 'complete'
+    
     console.log('Approve action triggered for:', itemId)
-    setWorkflowItems(items => 
-      items.map(item => {
-        if (item.id === itemId) {
-          const nextStage = item.currentStage === 'submitted' ? 'review' : 
-                          item.currentStage === 'review' ? 'approved' : 'complete'
-          return { ...item, currentStage: nextStage as any }
-        }
-        return item
-      })
-    )
+    updateWorkflowMutation.mutate({ id: itemId, updates: { currentStage: nextStage } })
   }
 
   const handleReject = (itemId: string) => {
     console.log('Reject action triggered for:', itemId)
-    setWorkflowItems(items => 
-      items.map(item => 
-        item.id === itemId ? { ...item, currentStage: 'submitted' as const } : item
-      )
-    )
+    updateWorkflowMutation.mutate({ id: itemId, updates: { currentStage: 'submitted' } })
   }
 
   const stageOrder = ['submitted', 'review', 'approved', 'complete']
@@ -104,7 +66,45 @@ export default function WorkflowManagement({ onBack }: WorkflowManagementProps) 
     'complete': 'bg-green-500'
   }
 
-  const pendingItems = workflowItems.filter(item => item.currentStage !== 'complete')
+  const pendingItems = workflowItems.filter((item: WorkflowItem) => item.currentStage !== 'complete')
+  
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background p-6">
+        <div className="max-w-6xl mx-auto">
+          <div className="mb-6">
+            <Button variant="ghost" onClick={onBack} data-testid="button-back-dashboard">
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Back to Dashboard
+            </Button>
+          </div>
+          <div className="flex items-center justify-center py-12">
+            <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+          </div>
+        </div>
+      </div>
+    )
+  }
+  
+  if (error) {
+    return (
+      <div className="min-h-screen bg-background p-6">
+        <div className="max-w-6xl mx-auto">
+          <div className="mb-6">
+            <Button variant="ghost" onClick={onBack} data-testid="button-back-dashboard">
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Back to Dashboard
+            </Button>
+          </div>
+          <Card>
+            <CardContent className="pt-6">
+              <p className="text-center text-muted-foreground">Failed to load workflow items</p>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen bg-background p-6">
@@ -139,7 +139,7 @@ export default function WorkflowManagement({ onBack }: WorkflowManagementProps) 
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {pendingItems.map((item) => (
+                  {pendingItems.map((item: WorkflowItem) => (
                     <Card key={item.id} className="bg-muted/20" data-testid={`workflow-item-${item.id}`}>
                       <CardContent className="pt-6">
                         <div className="space-y-4">
@@ -158,7 +158,7 @@ export default function WorkflowManagement({ onBack }: WorkflowManagementProps) 
                               </p>
                               <div className="flex items-center gap-4 text-xs text-muted-foreground">
                                 <span>Department: {item.department}</span>
-                                <span>Submitted: {new Date(item.submittedDate).toLocaleDateString()}</span>
+                                <span>Submitted: {item.submittedAt ? new Date(item.submittedAt).toLocaleDateString() : 'N/A'}</span>
                               </div>
                             </div>
                           </div>

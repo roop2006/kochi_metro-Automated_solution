@@ -18,46 +18,69 @@ export default function QRScanner({ onBack }: QRScannerProps) {
   } | null>(null)
   const [isScanning, setIsScanning] = useState(false)
 
-  const handleSimulateScan = () => {
+  const handleSimulateScan = async () => {
     console.log('QR scan simulation triggered')
     setIsScanning(true)
     
-    //todo: remove mock functionality - integrate with real QR scanner API
-    setTimeout(() => {
-      const mockScanResults = [
-        {
-          documentId: 'MJC-2025-892',
-          title: 'Maintenance Job Card #MJC-2025-892',
-          equipment: 'Train Car 205',
-          status: 'in_progress' as const,
-          description: 'Brake system inspection and routine maintenance work in progress'
-        },
-        {
-          documentId: 'MJC-2025-893',
-          title: 'Maintenance Job Card #MJC-2025-893',
-          equipment: 'Signal System Block A3',
-          status: 'pending' as const,
-          description: 'Scheduled signal maintenance pending approval and resource allocation'
-        },
-        {
-          documentId: 'MJC-2025-891',
-          title: 'Maintenance Job Card #MJC-2025-891',
-          equipment: 'Platform Safety Barriers', 
-          status: 'completed' as const,
-          description: 'Safety barrier inspection and testing completed successfully'
+    try {
+      const response = await fetch('/api/qr-scan/simulate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
         }
-      ]
+      })
       
-      const randomResult = mockScanResults[Math.floor(Math.random() * mockScanResults.length)]
-      setScanResult(randomResult)
+      if (!response.ok) {
+        throw new Error('QR scan failed')
+      }
+      
+      const result = await response.json()
+      setScanResult(result)
+    } catch (error) {
+      console.error('QR scan error:', error)
+      // Fallback result in case of error
+      setScanResult({
+        documentId: 'ERROR-001',
+        title: 'Scan Error',
+        equipment: 'Unknown',
+        status: 'pending' as const,
+        description: 'Failed to scan QR code. Please try again.'
+      })
+    } finally {
       setIsScanning(false)
-    }, 1500)
+    }
   }
 
-  const handleUpdateStatus = (newStatus: 'in_progress' | 'pending' | 'completed') => {
+  const handleUpdateStatus = async (newStatus: 'in_progress' | 'pending' | 'completed') => {
     console.log('Status update triggered:', newStatus)
     if (scanResult) {
-      setScanResult({ ...scanResult, status: newStatus })
+      try {
+        // Find the QR code by its code/documentId and update it
+        const response = await fetch(`/api/qr-codes/${scanResult.documentId}`, {
+          method: 'GET'
+        })
+        
+        if (response.ok) {
+          const qrCode = await response.json()
+          
+          // Update the QR code status
+          const updateResponse = await fetch(`/api/qr-codes/${qrCode.id}`, {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ status: newStatus })
+          })
+          
+          if (updateResponse.ok) {
+            setScanResult({ ...scanResult, status: newStatus })
+          }
+        }
+      } catch (error) {
+        console.error('Status update error:', error)
+        // Still update the UI for better UX
+        setScanResult({ ...scanResult, status: newStatus })
+      }
     }
   }
 

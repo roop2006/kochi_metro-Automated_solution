@@ -3,7 +3,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
-import { Search, ArrowLeft, FileText, Calendar, Building2 } from 'lucide-react'
+import { Search, ArrowLeft, FileText, Calendar, Building2, Loader2 } from 'lucide-react'
+import { useQuery } from '@tanstack/react-query'
 
 interface SearchResult {
   id: string
@@ -22,57 +23,15 @@ export default function SmartSearch({ onBack }: SmartSearchProps) {
   const [searchQuery, setSearchQuery] = useState('')
   const [activeFilter, setActiveFilter] = useState('all')
   
-  //todo: remove mock functionality - replace with real search API
-  const mockResults: SearchResult[] = [
-    {
-      id: '1',
-      title: 'Maintenance Report - Train Car 205',
-      department: 'Maintenance',
-      date: '2025-01-10',
-      summary: 'Comprehensive brake system inspection and routine maintenance completed. All systems operating within normal parameters.',
-      type: 'maintenance'
-    },
-    {
-      id: '2', 
-      title: 'Safety Circular - Platform Guidelines',
-      department: 'Safety',
-      date: '2025-01-09',
-      summary: 'Updated safety protocols for platform operations during peak hours. Includes emergency evacuation procedures.',
-      type: 'safety'
-    },
-    {
-      id: '3',
-      title: 'Vendor Invoice - Track Supplies', 
-      department: 'Finance',
-      date: '2025-01-08',
-      summary: 'Monthly procurement invoice for track maintenance materials and specialized rail components.',
-      type: 'finance'
-    },
-    {
-      id: '4',
-      title: 'Meeting Minutes - Budget Review',
-      department: 'Finance', 
-      date: '2025-01-07',
-      summary: 'Quarterly budget review meeting discussing operational expenses and infrastructure investments.',
-      type: 'finance'
-    },
-    {
-      id: '5',
-      title: 'Equipment Inspection - Signal Systems',
-      department: 'Maintenance',
-      date: '2025-01-06',
-      summary: 'Monthly inspection of automated signaling systems across all metro stations. All equipment functional.',
-      type: 'maintenance'
-    },
-    {
-      id: '6',
-      title: 'Staff Training Manual - Emergency Response',
-      department: 'HR',
-      date: '2025-01-05',
-      summary: 'Comprehensive training manual for emergency response procedures and passenger safety protocols.',
-      type: 'hr'
+  const { data: searchResults = [], isLoading, error } = useQuery({
+    queryKey: ['/api/documents/search', searchQuery, activeFilter],
+    queryFn: () => {
+      const params = new URLSearchParams()
+      if (searchQuery) params.append('q', searchQuery)
+      if (activeFilter !== 'all') params.append('type', activeFilter)
+      return fetch(`/api/documents/search?${params}`).then(res => res.json())
     }
-  ]
+  })
 
   const filters = [
     { id: 'all', label: 'All Documents' },
@@ -81,17 +40,6 @@ export default function SmartSearch({ onBack }: SmartSearchProps) {
     { id: 'finance', label: 'Finance' },
     { id: 'hr', label: 'HR' }
   ]
-
-  const filteredResults = activeFilter === 'all' 
-    ? mockResults 
-    : mockResults.filter(result => result.type === activeFilter)
-
-  const searchResults = searchQuery 
-    ? filteredResults.filter(result => 
-        result.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        result.summary.toLowerCase().includes(searchQuery.toLowerCase())
-      )
-    : filteredResults
 
   const handleSearch = () => {
     console.log('Search triggered:', searchQuery)
@@ -158,46 +106,60 @@ export default function SmartSearch({ onBack }: SmartSearchProps) {
         </Card>
 
         <div className="space-y-4">
-          <div className="text-sm text-muted-foreground" data-testid="search-results-count">
-            {searchResults.length} documents found
-          </div>
-          
-          {searchResults.map(result => (
-            <Card 
-              key={result.id} 
-              className="hover-elevate cursor-pointer" 
-              onClick={() => handleResultClick(result)}
-              data-testid={`card-result-${result.id}`}
-            >
+          {isLoading ? (
+            <div className="flex items-center justify-center py-12">
+              <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+            </div>
+          ) : error ? (
+            <Card>
               <CardContent className="pt-6">
-                <div className="space-y-3">
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="flex-1">
-                      <h3 className="font-medium text-foreground mb-1">{result.title}</h3>
-                      <p className="text-sm text-muted-foreground">{result.summary}</p>
-                    </div>
-                    <FileText className="h-5 w-5 text-muted-foreground flex-shrink-0" />
-                  </div>
-                  
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                      <div className="flex items-center gap-1">
-                        <Building2 className="h-3 w-3" />
-                        {result.department}
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <Calendar className="h-3 w-3" />
-                        {new Date(result.date).toLocaleDateString()}
-                      </div>
-                    </div>
-                    <Badge variant="outline" className="text-xs">
-                      {result.type}
-                    </Badge>
-                  </div>
-                </div>
+                <p className="text-center text-muted-foreground">Failed to load search results</p>
               </CardContent>
             </Card>
-          ))}
+          ) : (
+            <>
+              <div className="text-sm text-muted-foreground" data-testid="search-results-count">
+                {searchResults.length} documents found
+              </div>
+              
+              {searchResults.map((result: SearchResult) => (
+                <Card 
+                  key={result.id} 
+                  className="hover-elevate cursor-pointer" 
+                  onClick={() => handleResultClick(result)}
+                  data-testid={`card-result-${result.id}`}
+                >
+                  <CardContent className="pt-6">
+                    <div className="space-y-3">
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="flex-1">
+                          <h3 className="font-medium text-foreground mb-1">{result.title}</h3>
+                          <p className="text-sm text-muted-foreground">{result.summary}</p>
+                        </div>
+                        <FileText className="h-5 w-5 text-muted-foreground flex-shrink-0" />
+                      </div>
+                      
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                          <div className="flex items-center gap-1">
+                            <Building2 className="h-3 w-3" />
+                            {result.department}
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <Calendar className="h-3 w-3" />
+                            {new Date(result.date).toLocaleDateString()}
+                          </div>
+                        </div>
+                        <Badge variant="outline" className="text-xs">
+                          {result.type}
+                        </Badge>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </>
+          )}
         </div>
       </div>
     </div>

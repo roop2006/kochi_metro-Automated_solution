@@ -44,38 +44,44 @@ export default function DocumentUpload({ onBack }: DocumentUploadProps) {
     }
   }
 
-  const handleFileUpload = (file: File) => {
+  const handleFileUpload = async (file: File) => {
     console.log('File upload triggered:', file.name)
     setIsProcessing(true)
     setProcessedFile(null)
     
-    //todo: remove mock functionality - integrate with real AI processing API
-    setTimeout(() => {
-      const mockResults = [
-        {
-          classification: 'Maintenance Report',
-          summary: 'Weekly brake system inspection completed successfully for Train Car 205',
-          department: 'Maintenance Department'
-        },
-        {
-          classification: 'Safety Circular',
-          summary: 'Updated platform safety guidelines and emergency procedures',
-          department: 'Safety Department'
-        },
-        {
-          classification: 'Vendor Invoice',
-          summary: 'Track supplies and materials procurement invoice for Q1 2025',
-          department: 'Finance Department'
-        }
-      ]
+    try {
+      const formData = new FormData()
+      formData.append('file', file)
       
-      const randomResult = mockResults[Math.floor(Math.random() * mockResults.length)]
+      const response = await fetch('/api/documents/upload', {
+        method: 'POST',
+        body: formData
+      })
+      
+      if (!response.ok) {
+        throw new Error('Upload failed')
+      }
+      
+      const result = await response.json()
+      
       setProcessedFile({
         name: file.name,
-        ...randomResult
+        classification: result.processing.classification,
+        summary: result.processing.summary,
+        department: result.processing.department
       })
+    } catch (error) {
+      console.error('Upload error:', error)
+      // Fallback to show error state
+      setProcessedFile({
+        name: file.name,
+        classification: 'Upload Error',
+        summary: 'Failed to process document. Please try again.',
+        department: 'System'
+      })
+    } finally {
       setIsProcessing(false)
-    }, 2500)
+    }
   }
 
   return (
