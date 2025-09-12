@@ -23,7 +23,7 @@ export default function SmartSearch({ onBack }: SmartSearchProps) {
   const [searchQuery, setSearchQuery] = useState('')
   const [activeFilter, setActiveFilter] = useState('all')
   
-  const { data: searchResults = [], isLoading, error } = useQuery({
+  const { data: searchResultsData, isLoading, error } = useQuery<SearchResult[]>({
     queryKey: ['/api/documents/search', searchQuery, activeFilter],
     queryFn: () => {
       const params = new URLSearchParams()
@@ -32,6 +32,9 @@ export default function SmartSearch({ onBack }: SmartSearchProps) {
       return fetch(`/api/documents/search?${params}`).then(res => res.json())
     }
   })
+  
+  // Ensure searchResults is always an array
+  const searchResults = Array.isArray(searchResultsData) ? searchResultsData : []
 
   const filters = [
     { id: 'all', label: 'All Documents' },
@@ -122,7 +125,7 @@ export default function SmartSearch({ onBack }: SmartSearchProps) {
                 {searchResults.length} documents found
               </div>
               
-              {searchResults.map((result: SearchResult) => (
+              {searchResults.length > 0 ? searchResults.map((result: SearchResult) => (
                 <Card 
                   key={result.id} 
                   className="hover-elevate cursor-pointer" 
@@ -157,7 +160,13 @@ export default function SmartSearch({ onBack }: SmartSearchProps) {
                     </div>
                   </CardContent>
                 </Card>
-              ))}
+              )) : (
+                <Card>
+                  <CardContent className="pt-6">
+                    <p className="text-center text-muted-foreground">No documents found</p>
+                  </CardContent>
+                </Card>
+              )}
             </>
           )}
         </div>
